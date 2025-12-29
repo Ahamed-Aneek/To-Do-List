@@ -1,0 +1,71 @@
+.container {
+  width: 80%;
+  height: 100%;
+  height: max-content;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 25px;
+  font-family: "Inter", sans-serif;
+}
+.container h3 {
+  text-transform: capitalize;
+  grid-column: 1/3;
+  justify-self: center;
+}
+.outer {
+  width: 100%;
+  height: max-content;
+  display: flex;
+  grid-column: 1/3;
+  justify-content: center;
+  gap: 12px;
+}
+.outer input {
+  height: 20px;
+  width: 200px;
+}
+.addtask {
+  height: 25px;
+  width: 80px;
+  background-color: #339af0;
+  border: 2px solid #339af0;
+  border-radius: 5px;
+  color: #fff;
+}
+.tasks {
+  grid-column: 1/3;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  row-gap: 25px;
+  position: static;
+}
+.frame {
+  grid-column: 1/3;
+  display: flex;
+  justify-content: start;
+  border-bottom: 2px solid #ced4da;
+  position: relative;
+}
+.finish {
+  text-decoration: line-through;
+}
+.delete {
+  border-radius: 3px;
+  border: none;
+  background-color: #f03e3e;
+  color: #fff;
+  order: 99;
+  height: auto;
+  width: auto;
+  position: absolute;
+  right: 0;
+  margin-right: 10px;
+}
+.name {
+  color: #868e96;
+}
+.frame div {
+  width: 70%;
+}
