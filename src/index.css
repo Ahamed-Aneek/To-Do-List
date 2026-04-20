@@ -13,7 +13,7 @@ code {
 }
 .app {
   width: 100%;
-  height: 80%;
+  height: 100%;
   background-color: #1c261f;
   padding: 10px;
 }
@@ -47,6 +47,7 @@ code {
   background-color: #61c785;
   height: 100%;
   border-radius: 3px;
+  transition: ease-in 600ms;
 }
 .time {
   width: 140px;
@@ -85,7 +86,7 @@ h4 {
   width: 100%;
   height: 70%;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   margin-top: 30px;
   align-items: center;
   gap: 15px;
@@ -117,26 +118,46 @@ h4 {
   height: 30px;
 }
 .add form {
-  width: 300px;
-  height: 400px;
+  width: 480px;
+  height: 600px;
   border-radius: 12px;
-  background-color: #6bb2f2;
+  background-color: #fff;
   position: fixed;
   top: 10px;
   left: 40%;
   padding: 12px;
   transition: ease-in 400ms;
+  box-shadow: 0 5px 2px 2px rgba(0, 0, 0, 0.068);
+  border-top: 6px solid #3d78fc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+.add form input {
+  width: 400px;
+  height: 48px;
+  border-radius: 10px;
+  text-align: justify;
+  background-color: #f7faff;
+  border: 2px solid #dee3ed;
+  color: #a1abc2;
+  text-transform: capitalize;
+  font-family: "inter", sans-serif;
+}
+
 .cancel {
   position: absolute;
-  top: 0;
+  top: -2px;
   right: 0;
+  border: none;
+  background-color: #fff;
+  border-radius: 10px;
 }
 .do {
   position: fixed;
   left: 50%;
   right: 50%;
-  top: 0;
+  bottom: 0;
   width: 70px;
   height: 70px;
   border-radius: 50%;
@@ -145,5 +166,11 @@ h4 {
 .insert {
   position: absolute;
   bottom: 10px;
-  left: 40%;
+  left: 12%;
+  width: 400px;
+  height: 50px;
+  background-color: #3d78fc;
+  border-radius: 12px;
+  border: none;
+  color: #fff;
 }

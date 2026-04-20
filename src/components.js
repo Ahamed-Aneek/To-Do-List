@@ -1,13 +1,7 @@
 "";
-export const completed = [];
-export const TasksArr = [
-  {
-    task: "Study",
-    catogery: "work",
-    time: new Date().toDateString(),
-  },
-  { task: "play", catogery: "entertain", time: new Date().toDateString() },
-];
+
+import { useState } from "react";
+
 export const Catogaries = function () {
   return (
     <nav className="btns">
@@ -19,15 +13,20 @@ export const Catogaries = function () {
   );
 };
 const Display = function ({ task, checked }) {
+  const [tik, setTik] = useState(false);
   return (
     <div className="display">
       <input
         type="checkbox"
         style={{ width: "22px", height: "22px" }}
-        onChange={checked}
+        onChange={(e) => {
+          checked(e);
+          setTik(!tik);
+        }}
+        checked={tik}
       ></input>
       <nav>
-        <span>{task.task}</span>
+        <span>{task.Name}</span>
       </nav>
       <div>
         <span>{task.catogery}</span>
@@ -36,10 +35,10 @@ const Display = function ({ task, checked }) {
     </div>
   );
 };
-export const Tasks = function ({ checked }) {
+export const Tasks = function ({ checked, work }) {
   return (
     <section className="tasks">
-      {TasksArr.map((task) => (
+      {work.map((task) => (
         <Display
           task={task}
           checked={checked}

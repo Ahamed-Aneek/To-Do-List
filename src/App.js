@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./App.css";
-import { Catogaries, Tasks, Addtask, TasksArr, completed } from "./components";
+import { Catogaries, Tasks, Addtask } from "./components";
 const Progress = function ({ total, complete }) {
+  console.log(complete);
   return (
     <section className="progress">
       <span style={{ color: "#EDE5D1" }}>
@@ -31,12 +32,13 @@ const Header = function ({ time, total, complete }) {
   );
 };
 function App() {
+  const [work, setWork] = useState([]);
   const [open, isOpen] = useState(false);
   const [time, setTime] = useState(new Date());
   const [Name, setName] = useState("");
   const [catogery, setCatogery] = useState("");
-  const [total, setTotal] = useState(TasksArr.length);
-  const [complete, setComplete] = useState(completed.length);
+  const [total, setTotal] = useState(work.length+1);
+  const [complete, setComplete] = useState([]);
   const setTask = (e) => {
     setName(e.target.value);
   };
@@ -52,33 +54,33 @@ function App() {
   };
   const insert = (e) => {
     e.preventDefault();
-    TasksArr.push({
-      task: Name,
-      catogery: catogery,
-      time: new Date().toDateString(),
-    });
-    setTotal(TasksArr.length);
+    setWork((t) => [
+      ...t,
+      { Name, catogery, time: new Date().toDateString(), done: false },
+    ]);
+    setTotal(work.length);
+    console.log(work);
   };
 
   const checked = (e) => {
     console.log(e.target.checked);
+
     if (e.target.checked) {
-      completed.push({
-        task: Name,
-        catogery: catogery,
-        time: new Date().toDateString(),
-      });
-      setComplete(completed.length);
+      setComplete((t) => [
+        ...t,
+        { Name, catogery, time: new Date().toDateString(), done: true },
+      ]);
+      console.log(complete);
     } else {
-      completed.length = 0;
+      complete.splice(1, complete.length);
     }
   };
-  console.log(complete);
+
   return (
     <div className="app">
-      <Header time={time} total={total} complete={complete}></Header>
+      <Header time={time} total={total} complete={complete.length}></Header>
       <Catogaries></Catogaries>
-      <Tasks checked={checked}></Tasks>
+      <Tasks checked={checked} work={work}></Tasks>
       <Addtask
         open={open}
         render={render}
