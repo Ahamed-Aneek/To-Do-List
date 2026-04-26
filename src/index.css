@@ -674,3 +674,163 @@ h4 {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(108,99,255,0.3); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(108,99,255,0.55); }
+
+/* ══════════════════════════════════════════
+   MOBILE RESPONSIVE  –  ≤ 640 px
+══════════════════════════════════════════ */
+@media (max-width: 640px) {
+
+  /* Header */
+  .top {
+    padding: 20px 16px 12px;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+  }
+
+  h4 {
+    font-size: 22px;
+  }
+
+  .top section {
+    font-size: 13px;
+  }
+
+  .time {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  /* Progress card */
+  .progress {
+    padding: 14px 16px;
+  }
+
+  /* Category nav */
+  .btns {
+    padding: 6px 16px 2px;
+    gap: 8px;
+  }
+
+  .btns button {
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+
+  /* Tasks list */
+  .tasks {
+    padding: 12px 16px;
+    gap: 10px;
+  }
+
+  /* Task card — wrap into two lines on small screens */
+  .display {
+    padding: 12px 12px;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  /* Keep checkbox & text on first row */
+  .display input[type="checkbox"] {
+    margin-top: 2px;
+  }
+
+  .display nav {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .display nav span {
+    font-size: 14px;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  /* Category tag — push to second row */
+  .display .cat-tag {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  /* Date — hide on very small screens */
+  .task-date {
+    display: none;
+  }
+
+  /* Action buttons — always visible on touch (no :hover) */
+  .star-btn,
+  .delete-btn {
+    opacity: 1;
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .task-actions {
+    gap: 4px;
+  }
+
+  /* Add button */
+  .do {
+    width: 54px;
+    height: 54px;
+    font-size: 26px;
+  }
+
+  /* Modal form */
+  .add form {
+    width: calc(100vw - 24px);
+    padding: 28px 20px 24px;
+    border-radius: 16px;
+  }
+
+  .add form::before {
+    font-size: 16px;
+  }
+
+  .add form input {
+    height: 46px;
+    font-size: 14px;
+  }
+
+  .insert {
+    height: 48px;
+    font-size: 14px;
+  }
+
+  /* Empty state */
+  .empty-state {
+    padding: 48px 16px;
+  }
+
+  .empty-state .empty-icon {
+    font-size: 44px;
+  }
+}
+
+/* ══════════════════════════════════════════
+   EXTRA SMALL  –  ≤ 380 px
+══════════════════════════════════════════ */
+@media (max-width: 380px) {
+
+  h4 { font-size: 20px; }
+
+  .time {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+
+  .btns button {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
+  /* Hide category tag too on tiny screens */
+  .display .cat-tag {
+    display: none;
+  }
+
+  .display nav span {
+    font-size: 13px;
+  }
+}
