@@ -1,79 +1,158 @@
-"";
-
 import { useState } from "react";
 
-export const Catogaries = function () {
+/* ── Category counts for badge display ── */
+function getCounts(tasks) {
+  return {
+    All: tasks.length,
+    Active: tasks.filter((t) => !t.done).length,
+    Done: tasks.filter((t) => t.done).length,
+    Important: tasks.filter((t) => t.important).length,
+  };
+}
+
+/* ── Category Nav ── */
+export const Catogaries = function ({ active, setActive, tasks }) {
+  const cats = ["All", "Active", "Done", "Important"];
+  const counts = getCounts(tasks);
   return (
     <nav className="btns">
-      <button>All</button>
-      <button>Active</button>
-      <button>Done</button>
-      <button>Important</button>
+      {cats.map((c) => (
+        <button
+          key={c}
+          className={active === c ? "active" : ""}
+          onClick={() => setActive(c)}
+        >
+          {c}
+          {counts[c] > 0 && (
+            <span className={`badge${active === c ? " badge-active" : ""}`}>
+              {counts[c]}
+            </span>
+          )}
+        </button>
+      ))}
     </nav>
   );
 };
-const Display = function ({ task, checked }) {
-  const [tik, setTik] = useState(false);
+
+/* ── Single Task Card ── */
+const Display = function ({ task, index, toggleDone, toggleImportant, deleteTask }) {
   return (
-    <div className="display">
+    <div
+      className={`display${task.done ? " done" : ""}${task.important ? " important" : ""}`}
+      style={{ animationDelay: `${index * 60}ms` }}
+    >
+      {/* Checkbox */}
       <input
         type="checkbox"
-        style={{ width: "22px", height: "22px" }}
-        onChange={(e) => {
-          checked(e);
-          setTik(!tik);
-        }}
-        checked={tik}
-      ></input>
+        onChange={() => toggleDone(task.id)}
+        checked={task.done}
+      />
+
+      {/* Task name */}
       <nav>
         <span>{task.Name}</span>
       </nav>
-      <div>
+
+      {/* Category tag */}
+      <div className="cat-tag">
         <span>{task.catogery}</span>
       </div>
-      <span>{task.time}</span>
+
+      {/* Date */}
+      <span className="task-date">{task.time}</span>
+
+      {/* Action buttons */}
+      <div className="task-actions">
+        <button
+          className={`star-btn${task.important ? " starred" : ""}`}
+          onClick={() => toggleImportant(task.id)}
+          title={task.important ? "Unmark important" : "Mark as important"}
+          aria-label="Toggle important"
+        >
+          {task.important ? "★" : "☆"}
+        </button>
+        <button
+          className="delete-btn"
+          onClick={() => deleteTask(task.id)}
+          title="Delete task"
+          aria-label="Delete task"
+        >
+          ✕
+        </button>
+      </div>
     </div>
   );
 };
-export const Tasks = function ({ checked, work }) {
+
+/* ── Tasks List ── */
+export const Tasks = function ({ work, toggleDone, toggleImportant, deleteTask, activeFilter }) {
+  if (work.length === 0) {
+    const emptyMessages = {
+      All: { icon: "🗒️", msg: "No tasks yet", sub: "Hit + to add your first task" },
+      Active: { icon: "✅", msg: "No active tasks", sub: "All caught up!" },
+      Done: { icon: "🎉", msg: "Nothing completed yet", sub: "Check off tasks to see them here" },
+      Important: { icon: "⭐", msg: "No important tasks", sub: "Star a task to mark it as important" },
+    };
+    const { icon, msg, sub } = emptyMessages[activeFilter] || emptyMessages.All;
+    return (
+      <section className="tasks">
+        <div className="empty-state">
+          <span className="empty-icon">{icon}</span>
+          <p>{msg}</p>
+          <span>{sub}</span>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="tasks">
-      {work.map((task) => (
+      {work.map((task, i) => (
         <Display
           task={task}
-          checked={checked}
-          key={Math.random() * 10000}
-        ></Display>
+          key={task.id}
+          index={i}
+          toggleDone={toggleDone}
+          toggleImportant={toggleImportant}
+          deleteTask={deleteTask}
+        />
       ))}
     </section>
   );
 };
-export const Addtask = function ({
-  open,
-  render,
-  time,
-  add,
-  insert,
-  setTask,
-  Set,
-}) {
+
+/* ── Add Task Modal ── */
+export const Addtask = function ({ open, render, add, insert, setTask, Set, Name, catogery }) {
   return (
     <div className="add">
-      <button onClick={add} className="do">
+      <button onClick={add} className="do" aria-label="Add task">
         +
       </button>
       {open && (
-        <form>
-          <input type="text" placeholder="task" onChange={setTask}></input>
-          <p></p>
-          <input type="text" placeholder="catogery" onChange={Set}></input>
-          <button onClick={render} className="cancel">
-            ❌
-          </button>
-          <button className="insert" onClick={insert}>
-            AddTask
-          </button>
-        </form>
+        <>
+          <div className="modal-backdrop" onClick={render} />
+          <form onSubmit={insert}>
+            <button type="button" onClick={render} className="cancel">✕</button>
+            <input
+              type="text"
+              placeholder="Task name…"
+              onChange={setTask}
+              value={Name}
+              autoFocus
+              required
+            />
+            <input
+              type="text"
+              placeholder="Category (e.g. Work, Personal…)"
+              onChange={Set}
+              value={catogery}
+              required
+            />
+            <button className="insert" type="submit">
+              Add Task
+            </button>
+          </form>
+        </>
       )}
     </div>
   );
