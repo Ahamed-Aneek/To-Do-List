@@ -73,7 +73,7 @@ export const Catogaries = function ({ active, setActive, tasks, customCategories
             }}
             title={`Delete ${c} category`}
           >
-            <Trash2 size={10} />
+            <span style={{ fontSize: '10px' }}>❌</span>
           </button>
         </div>
       ))}
