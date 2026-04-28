@@ -82,6 +82,8 @@ function App() {
     isOpen(false);
   };
 
+  const navDefaults = ["All", "Active", "Done", "Important"];
+
   /* ── Create task ── */
   const insert = (e) => {
     e.preventDefault();
@@ -99,7 +101,6 @@ function App() {
     setWork((prev) => [newTask, ...prev]);
     
     // Also add to customCategories if it's not a default nav category and not already there
-    const navDefaults = ["All", "Active", "Done", "Important"];
     if (!navDefaults.includes(catogery) && !customCategories.includes(catogery)) {
       setCustomCategories((prev) => [...prev, catogery]);
     }
@@ -157,6 +158,13 @@ function App() {
     return t.catogery === activeFilter;
   });
 
+  const handleCategoryClick = (cat) => {
+    setActiveFilter(cat);
+    if (!navDefaults.includes(cat)) {
+      setCatogery(cat);
+    }
+  };
+
   return (
     <div className="app">
       <Header
@@ -166,7 +174,7 @@ function App() {
       />
       <Catogaries
         active={activeFilter}
-        setActive={setActiveFilter}
+        setActive={handleCategoryClick}
         tasks={work}
         customCategories={customCategories}
         deleteCategory={deleteCategory}
