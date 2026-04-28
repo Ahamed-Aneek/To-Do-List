@@ -167,7 +167,7 @@ body {
   width: 100%;
   display: flex;
   gap: 10px;
-  padding: 8px 20px 4px;
+  padding: 14px 20px 8px; /* Increased padding to prevent clipping of the delete icon */
   overflow-x: auto;
   scrollbar-width: none;
   position: relative;
@@ -190,6 +190,9 @@ body {
   cursor: pointer;
   transition: all var(--transition);
   letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .btns button:hover {
@@ -209,6 +212,75 @@ body {
   border-color: var(--accent);
   color: #fff;
   box-shadow: 0 4px 14px rgba(108,99,255,0.35);
+}
+
+/* ── Category Button Wrapper ── */
+.cat-btn-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.delete-cat-small {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--surface);
+  background: var(--surface2);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  opacity: 0;
+  transform: scale(0.6);
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.cat-btn-wrapper:hover .delete-cat-small {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.delete-cat-small:hover {
+  background: #ef4444;
+  color: #fff;
+  border-color: #ef4444;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(239,68,68,0.4);
+}
+
+.add-cat-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--accent2);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: all var(--transition);
+  width: max-content;
+}
+
+.add-cat-btn:hover {
+  color: #fff;
+  transform: translateX(4px);
+}
+
+/* Add New option styling */
+.add-new-option {
+  color: var(--accent2);
+  font-weight: 600;
+  background: var(--surface2);
 }
 
 /* ── Category count badge ── */
@@ -603,6 +675,10 @@ body {
   transition: all var(--transition);
   box-shadow: 0 4px 16px rgba(108,99,255,0.4);
   margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   position: static;
   left: unset;
   bottom: unset;

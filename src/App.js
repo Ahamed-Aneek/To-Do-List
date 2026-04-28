@@ -97,6 +97,13 @@ function App() {
     };
     
     setWork((prev) => [newTask, ...prev]);
+    
+    // Also add to customCategories if it's not a default nav category and not already there
+    const navDefaults = ["All", "Active", "Done", "Important"];
+    if (!navDefaults.includes(catogery) && !customCategories.includes(catogery)) {
+      setCustomCategories((prev) => [...prev, catogery]);
+    }
+
     setName("");
     setCatogery("");
     isOpen(false);
@@ -127,6 +134,20 @@ function App() {
     setCustomCategories((prev) => [...prev, name]);
   };
 
+  /* ── Delete custom category ── */
+  const deleteCategory = (name) => {
+    // Remove the category from customCategories
+    setCustomCategories((prev) => prev.filter((c) => c !== name));
+    
+    // Remove all tasks that belong to this category
+    setWork((prev) => prev.filter((t) => t.catogery !== name));
+
+    // If the active filter was the deleted category, reset to All
+    if (activeFilter === name) {
+      setActiveFilter("All");
+    }
+  };
+
   /* ── Filter tasks ── */
   const filteredWork = work.filter((t) => {
     if (activeFilter === "All") return true;
@@ -148,6 +169,7 @@ function App() {
         setActive={setActiveFilter}
         tasks={work}
         customCategories={customCategories}
+        deleteCategory={deleteCategory}
       />
       <Tasks
         work={filteredWork}

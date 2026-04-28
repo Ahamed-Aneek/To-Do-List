@@ -25,25 +25,57 @@ function getCounts(tasks, customCategories) {
 }
 
 /* ── Category Nav ── */
-export const Catogaries = function ({ active, setActive, tasks, customCategories = [] }) {
-  const defaultCats = ["All", "Active", "Done", "Important"];
+export const Catogaries = function ({ active, setActive, tasks, customCategories = [], deleteCategory }) {
   const counts = getCounts(tasks, customCategories);
-  const allCats = [...defaultCats, ...customCategories];
+  
+  const defaultCats = [
+    { name: "All", icon: <ClipboardList size={14} /> },
+    { name: "Active", icon: <Zap size={14} /> },
+    { name: "Done", icon: <PartyPopper size={14} /> },
+    { name: "Important", icon: <Star size={14} /> },
+  ];
+
   return (
     <nav className="btns">
-      {allCats.map((c) => (
+      {defaultCats.map((cat) => (
         <button
-          key={c}
-          className={active === c ? "active" : ""}
-          onClick={() => setActive(c)}
+          key={cat.name}
+          className={active === cat.name ? "active" : ""}
+          onClick={() => setActive(cat.name)}
         >
-          {c}
-          {counts[c] > 0 && (
-            <span className={`badge${active === c ? " badge-active" : ""}`}>
-              {counts[c]}
+          {cat.icon}
+          {cat.name}
+          {counts[cat.name] > 0 && (
+            <span className={`badge${active === cat.name ? " badge-active" : ""}`}>
+              {counts[cat.name]}
             </span>
           )}
         </button>
+      ))}
+      {customCategories.map((c) => (
+        <div key={c} className="cat-btn-wrapper">
+          <button
+            className={active === c ? "active" : ""}
+            onClick={() => setActive(c)}
+          >
+            {c}
+            {counts[c] > 0 && (
+              <span className={`badge${active === c ? " badge-active" : ""}`}>
+                {counts[c]}
+              </span>
+            )}
+          </button>
+          <button 
+            className="delete-cat-small"
+            onClick={(e) => {
+              e.stopPropagation();
+              deleteCategory(c);
+            }}
+            title={`Delete ${c} category`}
+          >
+            <Trash2 size={10} />
+          </button>
+        </div>
       ))}
     </nav>
   );
@@ -190,7 +222,14 @@ export const Addtask = function ({
             {/* Category selector */}
             <select
               value={catogery}
-              onChange={Set}
+              onChange={(e) => {
+                if (e.target.value === "ADD_NEW") {
+                  setShowNewCat(true);
+                  Set({ target: { value: "" } });
+                } else {
+                  Set(e);
+                }
+              }}
               required
               className="cat-select"
             >
@@ -198,6 +237,7 @@ export const Addtask = function ({
               {allSelectCats.map((c) => (
                 <option key={c} value={c}>{c}</option>
               ))}
+              <option value="ADD_NEW" className="add-new-option">+ Add New Category...</option>
             </select>
 
             {/* New category inline input */}
@@ -223,12 +263,12 @@ export const Addtask = function ({
                 className="add-cat-btn"
                 onClick={() => setShowNewCat(true)}
               >
-                + New category
+                <Plus size={14} /> New category
               </button>
             )}
 
             <button className="insert" type="submit">
-              Add Task
+              <Plus size={18} /> Add Task
             </button>
           </form>
         </>
