@@ -84,7 +84,7 @@ body {
   text-transform: capitalize;
 }
 
-h4 {
+.top h4 {
   font-size: 26px;
   font-weight: 700;
   color: var(--text);
@@ -106,11 +106,6 @@ h4 {
   align-self: start;
   box-shadow: 0 2px 12px rgba(108,99,255,0.35);
   letter-spacing: 0.2px;
-}
-
-.time::before {
-  content: '📅';
-  font-size: 13px;
 }
 
 /* ── Progress Card ── */
@@ -396,11 +391,12 @@ h4 {
 }
 
 .display input[type="checkbox"]:checked::after {
-  content: '✓';
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1;
+  content: '';
+  width: 10px;
+  height: 6px;
+  border-left: 2.5px solid #fff;
+  border-bottom: 2.5px solid #fff;
+  transform: rotate(-45deg) translateY(-1px);
 }
 
 .display input[type="checkbox"]:hover:not(:checked) {
@@ -442,11 +438,12 @@ h4 {
 }
 
 /* Date on task */
-.display > span:last-child {
+.display .task-date {
   font-size: 11px;
   color: var(--text-muted);
   white-space: nowrap;
   letter-spacing: 0.2px;
+  flex-shrink: 0;
 }
 
 /* ── Add Button ── */
@@ -507,14 +504,25 @@ h4 {
   z-index: 200;
 }
 
-.add form::before {
-  content: '✦ New Task';
-  display: block;
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.sparkle-icon {
+  color: var(--accent2);
+}
+
+.add form .modal-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 18px;
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.3px;
-  margin-bottom: 4px;
 }
 
 /* Modal backdrop */
@@ -669,6 +677,66 @@ h4 {
   50%       { transform: translateY(-8px); }
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Loading spinner */
+.spin {
+  animation: spin 1s linear infinite;
+  opacity: 0.7;
+}
+
+.spin-icon {
+  animation: spin 2s linear infinite;
+  opacity: 0.5;
+  color: var(--accent2);
+}
+
+/* Error / offline banner */
+.error-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 100vh;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 40px;
+}
+
+.error-banner svg {
+  color: #f87171;
+  opacity: 0.8;
+}
+
+.error-banner p {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.error-banner button {
+  padding: 10px 28px;
+  border-radius: 99px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent2);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.error-banner button:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(108,99,255,0.4);
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -687,7 +755,7 @@ h4 {
     gap: 12px;
   }
 
-  h4 {
+  .top h4 {
     font-size: 22px;
   }
 
@@ -813,7 +881,7 @@ h4 {
 ══════════════════════════════════════════ */
 @media (max-width: 380px) {
 
-  h4 { font-size: 20px; }
+  .top h4 { font-size: 20px; }
 
   .time {
     font-size: 10px;
@@ -832,5 +900,149 @@ h4 {
 
   .display nav span {
     font-size: 13px;
+  }
+}
+
+/* ── Category Select Dropdown ── */
+.cat-select {
+  width: 100%;
+  height: 50px;
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  border: 1.5px solid rgba(108,99,255,0.2);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 0 16px;
+  cursor: pointer;
+  outline: none;
+  transition: all var(--transition);
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237c8db5' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.cat-select:focus {
+  border-color: var(--accent);
+  background-color: rgba(108,99,255,0.08);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237c8db5' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  box-shadow: 0 0 0 3px rgba(108,99,255,0.15);
+}
+
+.cat-select option {
+  background: #1a1d2e;
+  color: var(--text);
+  font-size: 14px;
+}
+
+/* ── "New category" button ── */
+.add-cat-btn {
+  width: 100%;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  border: 1.5px dashed rgba(108,99,255,0.35);
+  background: transparent;
+  color: var(--accent2);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.add-cat-btn:hover {
+  background: rgba(108,99,255,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+/* ── New category inline row ── */
+.new-cat-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.new-cat-row input {
+  flex: 1;
+  height: 44px;
+  font-size: 13px;
+}
+
+/* Confirm ✔ button */
+.confirm-cat {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+  box-shadow: 0 3px 10px rgba(108,99,255,0.35);
+}
+
+.confirm-cat:hover {
+  transform: scale(1.08);
+  box-shadow: 0 5px 16px rgba(108,99,255,0.5);
+}
+
+/* Cancel ✕ button */
+.cancel-cat {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.cancel-cat:hover {
+  background: rgba(248,113,113,0.15);
+  color: #f87171;
+  transform: scale(1.08);
+}
+
+/* ── Mobile tweaks for new elements ── */
+@media (max-width: 640px) {
+  .cat-select {
+    height: 46px;
+    font-size: 13px;
+  }
+
+  .add-cat-btn {
+    height: 40px;
+    font-size: 12px;
+  }
+
+  .confirm-cat,
+  .cancel-cat {
+    width: 40px;
+    height: 40px;
+    font-size: 15px;
   }
 }

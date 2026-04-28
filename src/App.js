@@ -1,16 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import { Catogaries, Tasks, Addtask } from "./components";
-
-/* ── helpers ── */
-function load(key, fallback) {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : fallback;
-  } catch {
-    return fallback;
-  }
-}
+import { Calendar } from "lucide-react";
 
 /* ── Progress ── */
 const Progress = function ({ total, complete }) {
@@ -44,6 +35,7 @@ const Header = function ({ time, total, complete }) {
         <h4 style={{ color: "#E8D4A6" }}>Aneek</h4>
       </section>
       <div className="time">
+        <Calendar size={14} />
         <span>{time.toDateString()}</span>
       </div>
       <Progress total={total} complete={complete} />
@@ -53,24 +45,36 @@ const Header = function ({ time, total, complete }) {
 
 /* ── App ── */
 function App() {
-  const [work, setWork] = useState(() => load("tasks", []));
+  const [work, setWork] = useState(() => {
+    const saved = localStorage.getItem("tasks");
+    return saved ? JSON.parse(saved) : [];
+  });
+  
+  const [customCategories, setCustomCategories] = useState(() => {
+    const saved = localStorage.getItem("categories");
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const [open, isOpen] = useState(false);
   const [time] = useState(new Date());
   const [Name, setName] = useState("");
   const [catogery, setCatogery] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
 
-  /* persist tasks to localStorage whenever they change */
+  /* Save to localStorage whenever data changes */
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(work));
   }, [work]);
+
+  useEffect(() => {
+    localStorage.setItem("categories", JSON.stringify(customCategories));
+  }, [customCategories]);
 
   /* derived counts */
   const completedCount = work.filter((t) => t.done).length;
 
   const setTask = (e) => setName(e.target.value);
   const Set = (e) => setCatogery(e.target.value);
-
   const add = () => isOpen(true);
 
   const render = (e) => {
@@ -78,49 +82,58 @@ function App() {
     isOpen(false);
   };
 
+  /* ── Create task ── */
   const insert = (e) => {
     e.preventDefault();
     if (!Name || !catogery) return;
-    const item = {
+    
+    const newTask = {
       id: Date.now(),
-      Name,
-      catogery,
-      time: new Date().toDateString(),
+      Name: Name,
+      catogery: catogery,
       done: false,
       important: false,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
-    setWork((t) => [...t, item]);
+    
+    setWork((prev) => [newTask, ...prev]);
     setName("");
     setCatogery("");
     isOpen(false);
   };
 
-  /* toggle done */
+  /* ── Toggle done ── */
   const toggleDone = (id) => {
     setWork((prev) =>
       prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t))
     );
   };
 
-  /* toggle important */
+  /* ── Toggle important ── */
   const toggleImportant = (id) => {
     setWork((prev) =>
       prev.map((t) => (t.id === id ? { ...t, important: !t.important } : t))
     );
   };
 
-  /* delete task */
+  /* ── Delete task ── */
   const deleteTask = (id) => {
-    setWork((prev) => prev.filter((t) => t.id !== id));
+    setWork((p) => p.filter((t) => t.id !== id));
   };
 
-  /* filter tasks based on active filter */
+  /* ── Add custom category ── */
+  const handleAddCategory = (name) => {
+    if (customCategories.includes(name)) return;
+    setCustomCategories((prev) => [...prev, name]);
+  };
+
+  /* ── Filter tasks ── */
   const filteredWork = work.filter((t) => {
     if (activeFilter === "All") return true;
     if (activeFilter === "Active") return !t.done;
     if (activeFilter === "Done") return t.done;
     if (activeFilter === "Important") return t.important;
-    return true;
+    return t.catogery === activeFilter;
   });
 
   return (
@@ -134,6 +147,7 @@ function App() {
         active={activeFilter}
         setActive={setActiveFilter}
         tasks={work}
+        customCategories={customCategories}
       />
       <Tasks
         work={filteredWork}
@@ -151,9 +165,13 @@ function App() {
         Set={Set}
         Name={Name}
         catogery={catogery}
+        customCategories={customCategories}
+        setCustomCategories={setCustomCategories}
+        onAddCategory={handleAddCategory}
       />
     </div>
   );
 }
 
 export default App;
+
