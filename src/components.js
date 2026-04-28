@@ -1,18 +1,13 @@
 ﻿import { useState } from "react";
 import { 
-  Check, 
   Star, 
   Trash2, 
   Plus, 
   X, 
   ClipboardList, 
-  CheckCircle2, 
   PartyPopper,
-  Calendar,
   Sparkles,
-  LayoutGrid,
   Zap,
-  CheckCircle
 } from "lucide-react";
 
 /* ── Category counts for badge display ── */
