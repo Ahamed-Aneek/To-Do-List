@@ -75,7 +75,13 @@ function App() {
 
   const setTask = (e) => setName(e.target.value);
   const Set = (e) => setCatogery(e.target.value);
-  const add = () => isOpen(true);
+  const add = () => {
+    if (!navDefaults.includes(activeFilter)) {
+      setCatogery(activeFilter);
+    }
+    isOpen(true);
+  };
+
 
   const render = (e) => {
     e.preventDefault();
@@ -162,6 +168,8 @@ function App() {
     setActiveFilter(cat);
     if (!navDefaults.includes(cat)) {
       setCatogery(cat);
+    } else {
+      setCatogery("");
     }
   };
 
